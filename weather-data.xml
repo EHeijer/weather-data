@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<weatherData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="weather-data.xsd">
+    <station_id>159880</station_id>
+    <StationName>Arvidsjaur A</StationName>
+    <timestamp>2021-08-20T14:00:00Z</timestamp>
+    <Parameter>
+        <name>TEMP</name>
+        <value>14.2</value>
+    </Parameter>
+    <Parameter>
+        <name>WIND_DIRECTION</name>
+        <value>305</value>
+    </Parameter>
+    <Parameter>
+        <name>WIND_SPEED</name>
+        <value>2.7</value>
+    </Parameter>
+</weatherData>

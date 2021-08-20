@@ -2,17 +2,17 @@
 <weatherData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="weather-data.xsd">
     <station_id>159880</station_id>
     <StationName>Arvidsjaur A</StationName>
-    <timestamp>2021-08-20T14:00:00Z</timestamp>
+    <timestamp>2021-08-20T21:00:00Z</timestamp>
     <Parameter>
         <name>TEMP</name>
-        <value>14.2</value>
+        <value>11.4</value>
     </Parameter>
     <Parameter>
         <name>WIND_DIRECTION</name>
-        <value>305</value>
+        <value>299</value>
     </Parameter>
     <Parameter>
         <name>WIND_SPEED</name>
-        <value>2.7</value>
+        <value>4.5</value>
     </Parameter>
 </weatherData>

@@ -70,8 +70,8 @@ public class WeatherDataService {
 		String getSpeed = getResponse(startApiUrl + speed + endApiUrl, speed);
 		WeatherData weatherData = new WeatherData("159880", timestamp, getTemp, getDirection, getSpeed, parameterList, stationName);
 		javaObjectToXML(weatherData);
-		
-		readXmlFile();
+		String textString = readXmlFile();
+		createTxtFile(textString);
 		weatherData = weatherDataRepository.save(weatherData);
 		parameterList.clear();
 		return weatherData;
@@ -212,8 +212,8 @@ public class WeatherDataService {
 											if(childNode.getNodeType() == Node.ELEMENT_NODE) {
 												Element childField = (Element) childNode;
 												if (isNumeric(childField.getTextContent())) {
-													values.put(childField.getNodeName()+j,childField.getTextContent().trim());
-													System.out.println(childField.getTextContent());
+													values.put(childField.getNodeName()+k,childField.getTextContent().trim());
+											
 												} else {
 												    continue;
 												}	
@@ -231,12 +231,12 @@ public class WeatherDataService {
 					}
 				}
 			}
-			
-			resultText += values.get("Timestamp");
+			values.entrySet().forEach(x -> System.out.println(x.getKey()));
+			resultText += values.get("timestamp");
 			resultText += ","+ values.get("StationName");
-			resultText += ","+ values.get("Value3");
-			resultText += ","+ values.get("Value4");
-			resultText += ","+ values.get("Value5");
+			resultText += ","+ values.get("value0");
+			resultText += ","+ values.get("value1");
+			resultText += ","+ values.get("value2");
 			
 			System.out.println(resultText);
 			
@@ -252,6 +252,11 @@ public class WeatherDataService {
 	private boolean isNumeric(String string) {
 	    String regex = "[0-9]+[\\.]?[0-9]*";
 	    return Pattern.matches(regex, string);
+	}
+	
+	private void createTxtFile(String textString) {
+		
+		
 	}
 	
 	

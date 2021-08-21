@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<weatherData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="weather-data.xsd">
+<weatherData>
     <station_id>159880</station_id>
     <StationName>Arvidsjaur A</StationName>
-    <timestamp>2021-08-20T21:00:00Z</timestamp>
+    <timestamp>2021-08-21T13:00:00Z</timestamp>
     <Parameter>
         <name>TEMP</name>
-        <value>11.4</value>
+        <value>11.2</value>
     </Parameter>
     <Parameter>
         <name>WIND_DIRECTION</name>
-        <value>299</value>
+        <value>350</value>
     </Parameter>
     <Parameter>
         <name>WIND_SPEED</name>
-        <value>4.5</value>
+        <value>5.5</value>
     </Parameter>
 </weatherData>

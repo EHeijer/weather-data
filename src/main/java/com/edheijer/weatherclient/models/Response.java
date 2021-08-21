@@ -2,12 +2,13 @@ package com.edheijer.weatherclient.models;
 
 import java.util.List;
 
+import com.edheijer.weatherclient.services.CustomStringDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ValuesResponse {
+public class Response {
 	
 	@JsonProperty("value")
 	@JsonDeserialize(using = CustomStringDeserializer.class)

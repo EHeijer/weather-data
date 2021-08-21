@@ -2,7 +2,6 @@ package com.edheijer.weatherclient.models;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.xml.bind.annotation.XmlTransient;
 
 public class Parameter {
 	

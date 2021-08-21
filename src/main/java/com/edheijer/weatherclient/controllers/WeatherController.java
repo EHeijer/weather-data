@@ -21,7 +21,7 @@ public class WeatherController {
 	@Scheduled(cron="${app.apiCallFrequencyInSeconds}")
 	@GetMapping("weather-data")
 	public ResponseEntity<WeatherData> getRepsonse() {
-		WeatherData weatherData = weatherDataService.getWeatherData();
+		WeatherData weatherData = weatherDataService.handleWeatherData();
 		return ResponseEntity.ok().body(weatherData);
 	}
 	

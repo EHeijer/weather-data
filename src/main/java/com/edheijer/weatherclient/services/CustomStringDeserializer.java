@@ -1,4 +1,4 @@
-package com.edheijer.weatherclient.models;
+package com.edheijer.weatherclient.services;
 
 import java.io.IOException;
 import java.util.List;

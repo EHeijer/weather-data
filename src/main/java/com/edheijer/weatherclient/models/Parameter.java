@@ -3,6 +3,11 @@ package com.edheijer.weatherclient.models;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+/**
+* Parameter is a class that used to store name and value for diffrent parameter types.
+* @author Edvard Heijer
+* 
+*/
 public class Parameter {
 	
 	@Enumerated(EnumType.STRING)

@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+* Response is a class that I use to receive different types of json data from Api response 
+* @author Edvard Heijer
+* 
+*/
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
 	

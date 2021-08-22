@@ -7,8 +7,13 @@ import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+/**
+ * Generates a xsd-file from a JAXB-annotated java object
+ */
+
 public class MySchemaOutputResolver extends SchemaOutputResolver {
 
+	
 	@Override
 	public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
 		File file = new File("weather-data.xsd");

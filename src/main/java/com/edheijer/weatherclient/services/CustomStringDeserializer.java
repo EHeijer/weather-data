@@ -10,6 +10,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+* A custom deserializer that allow a json array to have a single value
+* 
+*/
+
 public class CustomStringDeserializer extends JsonDeserializer<List<String>>{
 
 	@Override

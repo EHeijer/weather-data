@@ -2,17 +2,17 @@
 <weatherData>
     <station_id>159880</station_id>
     <StationName>Arvidsjaur A</StationName>
-    <timestamp>2021-08-21T13:00:00Z</timestamp>
+    <timestamp>2021-08-22T23:00:00Z</timestamp>
     <Parameter>
         <name>TEMP</name>
-        <value>11.2</value>
+        <value>6.6</value>
     </Parameter>
     <Parameter>
         <name>WIND_DIRECTION</name>
-        <value>350</value>
+        <value>324</value>
     </Parameter>
     <Parameter>
         <name>WIND_SPEED</name>
-        <value>5.5</value>
+        <value>2.2</value>
     </Parameter>
 </weatherData>

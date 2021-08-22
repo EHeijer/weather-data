@@ -1,0 +1,75 @@
+body {
+	margin: 0;
+	font-family: 'Catamaran', sans-serif;
+}
+h3 {
+	font-family: 'Catamaran', sans-serif;
+    margin: 10px;
+    color: white;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 300;
+}
+h1 {
+	text-align: center;
+    font-size: 70px;
+    font-weight: 300;
+    margin: 2px;
+}
+hr {
+	color: white;
+    width: 120px;
+    margin: auto;
+}
+.weather-container {
+	display: block;
+  	position:absolute;
+  	height:auto;
+  	bottom:0;
+  	top:0;
+  	left:0;
+  	right:0;
+	padding-top: 60px;
+	background-image: url('../images/BGclear.jpg');
+	color: white;
+	display: flex;
+	justify-content: center;
+}
+.img-container {
+	padding: 40px;
+}
+.temp-container {
+	display: flex;
+	justify-content: center;
+}
+img {
+	height: 30vh;
+    width: 100%;
+}
+.info {
+	margin-top: 15px;
+}
+th {
+	width: 200px;
+	text-align:center;
+}
+td {
+	text-align: center;
+}
+.buttons-container {
+	display: flex;
+    justify-content: space-evenly;
+    padding: 50px;
+}
+button {
+	background-color: transparent;
+    color: white;
+    width: 150px;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px;
+    border-style: none;
+    border: solid white 2px;
+    border-radius: 7px;
+    cursor: pointer;
+}

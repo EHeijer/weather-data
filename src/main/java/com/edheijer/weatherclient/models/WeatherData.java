@@ -21,6 +21,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+* WeatherData is the only entity that I use to store weather data to the database.
+* 
+* @author Edvard Heijer
+* 
+*/
+
 @Entity
 @Table(name = "weather_data")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -104,7 +111,7 @@ public class WeatherData {
 		return direction;
 	}
 
-	public Instant getTimestamp2() {
+	public Instant getTimeStamp() {
 		return timestamp;
 	}
 
@@ -112,7 +119,7 @@ public class WeatherData {
 		this.timestamp = timestamp;
 	}
 
-	public String getStationName2() {
+	public String getStationname() {
 		return stationName;
 	}
 

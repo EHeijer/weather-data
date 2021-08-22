@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -28,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -39,6 +39,12 @@ import com.edheijer.weatherclient.repositories.WeatherDataRepository;
 
 import net.minidev.json.JSONArray;
 
+/**
+* This service class do all the business logic in the application. It calls the api, creates xml-files and save data to database.
+* @author Edvard Heijer
+* 
+*/
+
 @Service
 public class WeatherDataService {
 
@@ -47,13 +53,17 @@ public class WeatherDataService {
 	@Value("${app.stationId}")
 	private String stationId;
 
-	private final String temp = "1";
+	@Value("${app.temp}")
+	private String temp;
 
-	private final String direction = "3";
+	@Value("${app.direction}")
+	private String direction;
 
-	private final String speed = "4";
+	@Value("${app.speed}")
+	private String speed;
 	
-	private final String xmlFileString = "weather-data.xml";
+	@Value("${app.xmlFileString}")
+	private String xmlFileString;
 
 	private Instant timestamp;
 	
@@ -62,13 +72,17 @@ public class WeatherDataService {
 	List<Parameter> parameterList = new ArrayList<>();
 	
 	private String stationName;
+	
 
 	@Autowired
 	private WeatherDataRepository weatherDataRepository;
-
+	
+	
+	/**
+	 * Handle all work with weather data. Mostly used to call other methods. Then returns WeatherData to controller  
+	 */
 	public WeatherData handleWeatherData() {
-		// For some reason I can't declare this variable with "stationId" on class level
-		// because in that case is "stationId" null.
+		// Can't declare this variable with "stationId" on class level, because in that case, "stationId" is null.
 		String endApiUrl = "/station/" + stationId + "/period/latest-hour/data.json";
 		
 		//Get response for temp, direction and speed
@@ -81,26 +95,27 @@ public class WeatherDataService {
 		
 		createXmlFileFromJavaObject(weatherData);
 		
-		//Read from xml-file and then return a String with all info we need for txt-file
-		String textString = readXmlFile();
-		createOrAppendTxtFile(textString);
-		
 		//Save object to DB
 		weatherData = weatherDataRepository.save(weatherData);
 		parameterList.clear();
 		return weatherData;
 	}
 
+	/**
+	 * Calls the API and collect the response  
+	 * @param url and parameter
+	 */
 	private String getResponse(String url, String parameter) {
 		
 		//Use RestTemplates getForObject-method to get response from API. 
-		//Use Response class to retrive the data you need
 		RestTemplate restTemplate = new RestTemplate();
+		
+		//Use Response class to retrive the data you need
 		Response response = restTemplate.getForObject(url, Response.class);
 		
 		String result = "";
 		try {
-			//Retrieve value from temp, direction or speed depending on which parameter that's passed in
+			//Retrieve value for temp, direction or speed depending on which parameter that's passed in
 			String jsonValuesStr = JSONArray.toJSONString(response.getValues());
 			JSONObject jsonValueObj = new JSONObject(jsonValuesStr.substring(1, jsonValuesStr.length() - 1));
 			result = jsonValueObj.get("value").toString();
@@ -128,12 +143,15 @@ public class WeatherDataService {
 			parameterList.add(parameterInstance);
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;
 	}
 
+	/**
+	 * Creates a xml-file and xsd-file with JAXB library
+	 * @param weatherData
+	 */
 	private void createXmlFileFromJavaObject(WeatherData weatherData) { 
 		File xmlFile = new File(xmlFileString);
 		try { 
@@ -152,112 +170,21 @@ public class WeatherDataService {
 			jaxbMarshaller.marshal(weatherData, xmlFile); 
 			
 		  }
-		  catch (JAXBException e) 
-		  { 
-		  e.printStackTrace(); 
-		  
+		  catch (JAXBException e) { 
+			e.printStackTrace(); 
 		  } catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		  } 
 	}
 	
-	private String readXmlFile() {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		String resultText = "";
-		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			
-			Document document = builder.parse(new File(xmlFileString));
-			
-			document.getDocumentElement().normalize();
-			
-			resultText = getWeatherDataFromXml(document);
-			
-		} catch (Exception e) {
-			System.out.println("Error reading XML file:");
-			e.printStackTrace();
-		}
-		System.out.println(resultText);
-		return resultText;
-	}
-
-	/*
-	 * Loops through xml-file and then return a String that we later use for the txt-file
+	/**
+	 * Creates a text-file based on xml-file. Lets a user choose where to save the file. 
 	 */
-	private String getWeatherDataFromXml(Document document) {
-		NodeList nodeList = document.getElementsByTagName("weatherData");
-		Map<String,String> values = new HashMap<>();
+	public void createOrAppendTxtFileFromXmlData() {
+		//Read from xml-file and then return a String with all info we need for txt-file
+		String textString = readXmlFile();
 		
-		//Loop inside of weatherData node list and collect the data that we want to use
-		for(int i = 0; i < nodeList.getLength(); i++) {
-			Node weatherDataNode = nodeList.item(i);
-			
-			if(weatherDataNode.getNodeType() == Node.ELEMENT_NODE) {
-				
-				NodeList fields = weatherDataNode.getChildNodes();
-				for(int j = 0; j < fields.getLength(); j++) {
-					Node fieldNode = fields.item(j);
-					
-					if(fieldNode.getNodeType() == Node.ELEMENT_NODE) {
-						
-						if(fieldNode.getNodeName().equalsIgnoreCase("parameter")) {
-							handleParameterTags(document, values);
-						}else {
-							values.put(fieldNode.getNodeName(),fieldNode.getTextContent().trim());
-						}
-						
-					}
-				}
-			}
-		}
-		
-		return buildStringFromCollectedData(values);
-	}
-
-	//Loops trough all parameter-tags to collect data inside of them
-	private void handleParameterTags(Document document, Map<String, String> values) {
-		NodeList parameterList = document.getElementsByTagName("Parameter");
-		for(int k = 0; k < parameterList.getLength(); k++) {
-			Node parameterNode = parameterList.item(k);
-			
-			if(parameterNode.getNodeType() == Node.ELEMENT_NODE) {
-				NodeList parameterChilds = parameterNode.getChildNodes();
-				for(int l = 0; l < parameterChilds.getLength(); l++) {
-					Node childNode = parameterChilds.item(l);
-					
-					if(childNode.getNodeType() == Node.ELEMENT_NODE) {
-		
-						if (isNumeric(childNode.getTextContent())) {
-							values.put(childNode.getNodeName()+k,childNode.getTextContent().trim());
-					
-						} else {
-						    continue;
-						}	
-					}
-				}
-			}
-		}
-	}
-	
-	// Checks if the provided string is a numeric by applying a regular expression on it.
-	private boolean isNumeric(String string) {
-	    String regex = "[0-9]+[\\.]?[0-9]*";
-	    return Pattern.matches(regex, string);
-	}
-
-	private String buildStringFromCollectedData(Map<String, String> values) {
-		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append(values.get("timestamp"));
-		strBuilder.append("," + values.get("StationName"));
-		strBuilder.append("," + values.get("value0"));
-		strBuilder.append("," + values.get("value1"));
-		strBuilder.append("," + values.get("value2"));
-		return strBuilder.toString();
-	}
-	
-	private void createOrAppendTxtFile(String textString) {
-		File file;
+		File file = new File("weather-data.txt");
 		
 		//This creates a dialog window that gives the user an opportunity to choose where to save the file
 		JFileChooser chooser = new JFileChooser(".");
@@ -292,9 +219,80 @@ public class WeatherDataService {
     		}         
             
         }
-        // if the user cancelled the operation
+         
+		//if the user cancelled the operation
         else {
            System.out.println("Dialog window have been closed and no file have been saved.");
     	}
 	}
+	
+	/**
+	 * Creates document and then call the method "getWeatherDataFromXml" that will collect resultText from xml-file. 
+	 */
+	private String readXmlFile() {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		String resultText = "";
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			
+			Document document = builder.parse(new File(xmlFileString));
+			
+			document.getDocumentElement().normalize();
+			
+			resultText = getWeatherDataFromXml(document);
+			
+		} catch (Exception e) {
+			System.out.println("Error reading XML file:");
+			e.printStackTrace();
+		}
+		return resultText;
+	}
+
+	/**
+	 * Loops through xml-file, collect data that we need and then return a String that we later use for the txt-file. 
+	 */
+	private String getWeatherDataFromXml(Document document) {
+		Map<String,String> values = new HashMap<>();
+		
+		NodeList weatherDataNodes = document.getElementsByTagName("weatherData");
+		
+		//Loop inside of weatherData node list and collect the data that we want to use
+		for(int i = 0; i < weatherDataNodes.getLength(); i++) {
+			Node weatherDataNode = weatherDataNodes.item(i);
+			
+			if(weatherDataNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element element = (Element) weatherDataNode;
+				
+                String stationName = element.getElementsByTagName("StationName").item(0).getTextContent();
+                String timestamp = element.getElementsByTagName("timestamp").item(0).getTextContent();
+                values.put("StationName",stationName);
+                values.put("timestamp",timestamp);
+                
+                //Loop inside of parameter node list and collect data 
+                NodeList parameterList = document.getElementsByTagName("Parameter");
+        		for(int j = 0; j < parameterList.getLength(); j++) {
+        			Node parameterNode = parameterList.item(j);
+        			
+        			if(parameterNode.getNodeType() == Node.ELEMENT_NODE) {
+        				Element parameterElement = (Element) parameterNode;
+        				String value = parameterElement.getElementsByTagName("value").item(0).getTextContent();
+        				values.put("value" + j,value);
+        			}
+        		}
+			}
+		}
+		
+		return buildStringFromCollectedData(values);
+	}
+
+	private String buildStringFromCollectedData(Map<String, String> values) {
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append(values.get("timestamp"));
+		strBuilder.append("," + values.get("StationName"));
+		strBuilder.append("," + values.get("value0"));
+		strBuilder.append("," + values.get("value1"));
+		strBuilder.append("," + values.get("value2"));
+		return strBuilder.toString();
+	}
+	
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Weather</title>
+<link th:href="@{/css/weather.css}" rel="stylesheet">
+<script type="text/javascript" th:src="@{/js/Actions.js}"></script>
+</head>
+<body>
+	<div class="weather-container">
+		<div class="weather">
+			<h3 th:text="${weatherData.getStationname}"></h3>
+			<hr/>
+			<div class="img-container">
+				<img alt="" src="../images/sunWithCloud.svg">
+			</div>
+			<div class="temp-container">
+				<h1 th:text="${weatherData.getTemp}"></h1>
+				<h1>&#8451;</h1>
+			</div>
+			<div class="info">
+				<table class="table">
+				<thead class="thead">
+					<tr>
+						<th>UPDATED</th>
+						<th>WIND DIRECTION</th>
+						<th>WIND SPEED</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td th:text="${weatherData.getTimeStamp}"></td>
+						<td th:text="${weatherData.getDirection}"></td>
+						<td th:text="${weatherData.getSpeed}"></td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+			<div class="buttons-container">
+				<form th:action="@{/weather}" method="post">
+					<button id="notReloadButton" type="submit">SAVE DATA</button>
+				</form>
+				<form th:action="@{/weather/update}" method="post">
+					<button id="notReloadButton" type="submit">UPDATE</button>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>

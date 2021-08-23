@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.edheijer.weatherclient.models.WeatherData;
 import com.edheijer.weatherclient.services.WeatherDataService;
 
 /**
@@ -41,7 +40,7 @@ public class WeatherController {
 	
 	@PostMapping("/weather/update")
 	public String updateWeatherData() {
-		WeatherData data = weatherDataService.handleWeatherData();
+		weatherDataService.handleWeatherData();
 		return "redirect:/weather";
 	}
 	

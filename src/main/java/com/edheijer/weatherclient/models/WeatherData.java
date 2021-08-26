@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "weather_data")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement
-@XmlType(namespace = "https://www.example.org/weather-data", propOrder={"station_id", "stationName", "timestamp", "parameter"})
+@XmlType(namespace = "https://www.examp le.org/weather-data", propOrder={"station_id", "stationName", "timestamp", "parameter"})
 public class WeatherData {
 
 	@Id

@@ -112,7 +112,9 @@ public class WeatherDataService {
 		
 		//Use Response class to retrive the data you need
 		Response response = restTemplate.getForObject(url, Response.class);
-		
+
+
+
 		String result = "";
 		try {
 			//Retrieve value for temp, direction or speed depending on which parameter that's passed in
